@@ -1,3 +1,19 @@
+# src/preprocessing/data_management.py
+
+import pickle
+import numpy as np
+
+def load_model(filepath):
+    with open(filepath, 'rb') as file:
+        theta0, theta = pickle.load(file)
+        
+        # Ensure the parameters are numpy arrays of the correct type
+        theta0 = [np.array(t, dtype=float) for t in theta0]
+        theta = [np.array(t, dtype=float) for t in theta]
+        
+    return theta0, theta
+
+
 import os
 import pandas as pd
 import pickle
