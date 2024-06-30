@@ -1,18 +1,23 @@
-import os
 import pathlib
+import pandas as pd
+import os
+import numpy as np
+import tensorflow as tf
+from keras.models import Model
+from keras.layers import Input, Dense
+from keras.optimizers import RMSprop
+
 import src
 
-NUM_INPUTS = 2
-NUM_LAYERS = 3
-P = [NUM_INPUTS,2,1]
+# Create the training dataset
+training_data = None
+X_train = None
+Y_train = None
 
-f = [None,"linear","sigmoid"]
-
-LOSS_FUNCTION = "Mean Squared Error"
-MINI_BATCH_SIZE = 1
+epochs = 100
+mb_size = 2
 
 PACKAGE_ROOT = pathlib.Path(src.__file__).resolve().parent
-DATAPATH = os.path.join(PACKAGE_ROOT,"datasets") 
-#"/src/datasets"
+DATAPATH = os.path.join(PACKAGE_ROOT,"datasets")
+
 SAVED_MODEL_PATH = os.path.join(PACKAGE_ROOT,"trained_models")
-#"/src/trained_models"

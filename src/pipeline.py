@@ -1,34 +1,31 @@
-import pandas as pd
-import numpy as np
-import math
-
-from src.config import config
-
-theta0 = [None]
-theta = [None]
+from keras.layers import Input, Dense
+from keras.models import Model
+from src.preprocessing.data_management import load_dataset
+from src.config import config as c
+from src.preprocessing.preprocessors import optimizer, binary_cross_entropy_loss
 
 
-def initialize_layer_biases(num_units):
-  return np.random.uniform(low=-1,high=1,size=(1,num_units))
+def initialize_data():
+    data = load_dataset("train.csv")
+    c.X_train = data.iloc[:, :-1].values 
+    c.Y_train = data.iloc[:, -1].values.reshape(-1, 1)
+    c.training_data = data
 
 
-def initialize_layer_weights(num_units_l_1, num_units_l):
-  return np.random.uniform(low=-1,high=1,size=(num_units_l_1,num_units_l))
+# Define the model using the functional API
+def functional_mlp():
+    inp = Input(shape=(c.X_train.shape[1],))
+    first_hidden_out = Dense(units=4, activation="relu")(inp)
+    second_hidden_out = Dense(units=2, activation="relu")(first_hidden_out)
+    nn_out = Dense(units=1, activation="sigmoid")(second_hidden_out)
+    return Model(inputs=[inp], outputs=[nn_out])
+
+initialize_data()
 
 
-def initialize_parameters():
-  for l in range(1,config.NUM_LAYERS-1):
+# Instantiate the model and print the summary
+functional_nn = functional_mlp()
 
-    theta0.append(initialize_layer_biases(config.P[l])/math.sqrt(config.P[l-1]))
-    theta.append(initialize_layer_weights(config.P[l-1],config.P[l])/math.sqrt(config.P[l-1]))
+functional_nn.compile(optimizer=optimizer, loss=binary_cross_entropy_loss)
 
-  theta0.append(initialize_layer_biases(config.P[l])/math.sqrt(config.P[l-1]))
-  theta.append(initialize_layer_weights(config.P[l],config.P[l])/math.sqrt(config.P[l-1]))
-
-
-
-
-
-
-
-
+functional_nn.summary()
