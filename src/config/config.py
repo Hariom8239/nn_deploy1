@@ -1,23 +1,16 @@
-import pathlib
 import pandas as pd
-import os
 import numpy as np
-import tensorflow as tf
-from keras.models import Model
-from keras.layers import Input, Dense
-from keras.optimizers import RMSprop
+import torch
+from torch.nn import functional as F
+from torch.nn import Sequential
+from torch import nn
+from torch.utils.data import Dataset, DataLoader
 
-import src
 
-# Create the training dataset
-training_data = None
-X_train = None
-Y_train = None
+# Model Hyperparameters
+minibatch_size = 2
+epochs = 199
+learning_rate = 1e-3
 
-epochs = 100
-mb_size = 2
-
-PACKAGE_ROOT = pathlib.Path(src.__file__).resolve().parent
-DATAPATH = os.path.join(PACKAGE_ROOT,"datasets")
-
-SAVED_MODEL_PATH = os.path.join(PACKAGE_ROOT,"trained_models")
+# Loss Function and Optimizer
+bce_loss = nn.BCELoss()

@@ -18,5 +18,4 @@ RUN pip install -r /app/src/requirements.txt
 
 ENV PYTHONPATH=${PYTHONPATH}:/app/src
 
-ENTRYPOINT ["/app/entrypoint.sh"]
-
+ENTRYPOINT ["/app/ENTRYPOINT.sh"]
